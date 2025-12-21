@@ -1,12 +1,14 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
-import { AppMode, ImageState, AnalysisResult, ChatMessage } from './types';
+import { AppMode, ImageState, AnalysisResult, ChatMessage, GeminiModel, AppSettings } from './types';
 import { startLocationSession, sendCalibrationMessage, editImageWithAI } from './services/gemini';
 import { ImageUpload } from './components/ImageUpload';
 import { LocationAnalysis } from './components/LocationAnalysis';
 import { ImageMagicEditor } from './components/ImageMagicEditor';
 import { LoadingOverlay } from './components/LoadingOverlay';
+
+import { SettingsModal } from './components/SettingsModal';
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<AppMode>(AppMode.IDENTIFY);
@@ -19,9 +21,34 @@ const App: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
-  
+
+  // API Key & Model State
+  const [settings, setSettings] = useState<AppSettings>({
+    apiKey: '',
+    model: GeminiModel.GEMINI_2_0_FLASH_EXP
+  });
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+
   const chatRef = useRef<Chat | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize Settings from localStorage
+  useEffect(() => {
+    const storedApiKey = localStorage.getItem('geo_vision_api_key');
+    const storedModel = localStorage.getItem('geo_vision_model') as GeminiModel;
+
+    setSettings({
+      apiKey: storedApiKey || '',
+      model: storedModel || GeminiModel.GEMINI_2_0_FLASH_EXP
+    });
+  }, []);
+
+  const handleSaveSettings = (newSettings: AppSettings) => {
+    localStorage.setItem('geo_vision_api_key', newSettings.apiKey);
+    localStorage.setItem('geo_vision_model', newSettings.model);
+    setSettings(newSettings);
+    setShowSettingsModal(false);
+  };
 
   // 滚动至最新消息
   useEffect(() => {
@@ -32,24 +59,29 @@ const App: React.FC = () => {
 
   // Handle initial image selection and analysis
   const handleImageSelect = useCallback(async (base64: string) => {
+    if (!settings.apiKey) {
+      setShowSettingsModal(true);
+      return;
+    }
+
     setImageState({ original: base64, edited: null, analysis: null, chatHistory: [] });
     setError(null);
     setIsProcessing(true);
 
     try {
-      const { chat, imagePart } = startLocationSession(base64);
+      const { chat, imagePart } = startLocationSession(base64, settings.apiKey, settings.model);
       chatRef.current = chat;
-      
+
       // 发送初始图片分析请求
       const result = await sendCalibrationMessage(chat, [imagePart, { text: "请开始分析，提供精准校准逻辑并列出 30 个候选地点。" }]);
-      
-      setImageState(prev => ({ 
-        ...prev, 
+
+      setImageState(prev => ({
+        ...prev,
         analysis: result,
-        chatHistory: [{ 
-          role: 'model', 
-          content: '分析已完成。我已为您列出 30 个初始候选地点。您可以提供更多细节（如：“附近有座红顶房子”或“路牌是某种语言”）来进一步校准。', 
-          result 
+        chatHistory: [{
+          role: 'model',
+          content: '分析已完成。我已为您列出 30 个初始候选地点。您可以提供更多细节（如：“附近有座红顶房子”或“路牌是某种语言”）来进一步校准。',
+          result
         }]
       }));
     } catch (err: any) {
@@ -58,7 +90,7 @@ const App: React.FC = () => {
     } finally {
       setIsProcessing(false);
     }
-  }, []);
+  }, [settings]);
 
   // Send a calibration message in the chat
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -69,7 +101,7 @@ const App: React.FC = () => {
     setInputValue('');
     setIsProcessing(true);
     setError(null);
-    
+
     // 立即显示用户消息
     setImageState(prev => ({
       ...prev,
@@ -81,10 +113,10 @@ const App: React.FC = () => {
       setImageState(prev => ({
         ...prev,
         analysis: result,
-        chatHistory: [...prev.chatHistory, { 
-          role: 'model', 
-          content: `收到了，正在基于“${userText}”情报重塑坐标系统...`, 
-          result 
+        chatHistory: [...prev.chatHistory, {
+          role: 'model',
+          content: `收到了，正在基于“${userText}”情报重塑坐标系统...`,
+          result
         }]
       }));
     } catch (err: any) {
@@ -97,11 +129,16 @@ const App: React.FC = () => {
   // Fix: Added missing handleEdit function for image editing
   const handleEdit = useCallback(async (prompt: string) => {
     if (!imageState.original || isProcessing) return;
+    if (!settings.apiKey) {
+      setShowSettingsModal(true);
+      return;
+    }
+
     setIsProcessing(true);
     setError(null);
 
     try {
-      const editedBase64 = await editImageWithAI(imageState.original, prompt);
+      const editedBase64 = await editImageWithAI(imageState.original, prompt, settings.apiKey, settings.model);
       setImageState(prev => ({ ...prev, edited: editedBase64 }));
     } catch (err: any) {
       console.error(err);
@@ -109,7 +146,7 @@ const App: React.FC = () => {
     } finally {
       setIsProcessing(false);
     }
-  }, [imageState.original, isProcessing]);
+  }, [imageState.original, isProcessing, settings]);
 
   // Reset the app state
   const reset = () => {
@@ -134,20 +171,32 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <nav className="flex bg-white/5 p-1 rounded-2xl border border-white/10 shadow-inner">
-            <button 
-              onClick={() => setMode(AppMode.IDENTIFY)}
-              className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${mode === AppMode.IDENTIFY ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}
+          <div className="flex gap-4">
+            <nav className="flex bg-white/5 p-1 rounded-2xl border border-white/10 shadow-inner">
+              <button
+                onClick={() => setMode(AppMode.IDENTIFY)}
+                className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${mode === AppMode.IDENTIFY ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}
+              >
+                识别与校准
+              </button>
+              <button
+                onClick={() => setMode(AppMode.EDIT)}
+                className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${mode === AppMode.EDIT ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}
+              >
+                创意魔改
+              </button>
+            </nav>
+            <button
+              onClick={() => setShowSettingsModal(true)}
+              className={`p-3 rounded-2xl border transition-all duration-300 ${settings.apiKey ? 'bg-white/5 border-white/10 text-slate-400 hover:text-white' : 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20'} `}
+              title="API Key & Model Settings"
             >
-              识别与校准
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
             </button>
-            <button 
-              onClick={() => setMode(AppMode.EDIT)}
-              className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${mode === AppMode.EDIT ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}
-            >
-              创意魔改
-            </button>
-          </nav>
+          </div>
         </div>
       </header>
 
@@ -157,20 +206,20 @@ const App: React.FC = () => {
             <div className="text-center mb-16 relative">
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 bg-indigo-500/20 blur-[100px] rounded-full"></div>
               <h2 className="text-6xl font-black text-white mb-8 leading-[1.1] tracking-tighter">
-                一张图，<br/><span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">三十个可能的真相。</span>
+                一张图，<br /><span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">三十个可能的真相。</span>
               </h2>
               <p className="text-slate-400 text-xl leading-relaxed font-light">
-                上传任意地理照片，系统即刻生成 30 个阶梯式候选地址。<br/>
+                上传任意地理照片，系统即刻生成 30 个阶梯式候选地址。<br />
                 通过交互对话，我们为您抽丝剥茧，锁定唯一真实。
               </p>
             </div>
             <div className="vibrant-black-card p-2 rounded-[2.5rem]">
-               <ImageUpload onImageSelect={handleImageSelect} />
+              <ImageUpload onImageSelect={handleImageSelect} />
             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            
+
             {/* 左侧：情报工作区 */}
             <div className="lg:col-span-7 space-y-8">
               <div className="vibrant-black-card rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative">
@@ -184,8 +233,8 @@ const App: React.FC = () => {
                   {isProcessing && mode === AppMode.IDENTIFY && (
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
                       <div className="flex flex-col items-center">
-                         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div>
-                         <span className="text-xs text-indigo-400 mt-4 font-black tracking-widest animate-pulse">解析中...</span>
+                        <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div>
+                        <span className="text-xs text-indigo-400 mt-4 font-black tracking-widest animate-pulse">解析中...</span>
                       </div>
                     </div>
                   )}
@@ -195,17 +244,16 @@ const App: React.FC = () => {
                   <div className="p-6 border-t border-white/5 bg-black/40">
                     <div className="h-[350px] overflow-y-auto mb-6 space-y-5 px-3 custom-scrollbar">
                       {imageState.chatHistory.length === 0 && !isProcessing && (
-                         <div className="h-full flex items-center justify-center text-slate-600 text-sm italic">
-                            等待初步分析结果...
-                         </div>
+                        <div className="h-full flex items-center justify-center text-slate-600 text-sm italic">
+                          等待初步分析结果...
+                        </div>
                       )}
                       {imageState.chatHistory.map((msg, i) => (
                         <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}>
-                          <div className={`max-w-[90%] p-4 rounded-3xl text-sm leading-relaxed ${
-                            msg.role === 'user' 
-                              ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-none shadow-lg' 
-                              : 'bg-white/5 text-slate-300 border border-white/10 rounded-tl-none'
-                          }`}>
+                          <div className={`max-w-[90%] p-4 rounded-3xl text-sm leading-relaxed ${msg.role === 'user'
+                            ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-none shadow-lg'
+                            : 'bg-white/5 text-slate-300 border border-white/10 rounded-tl-none'
+                            }`}>
                             {msg.content}
                           </div>
                         </div>
@@ -214,20 +262,20 @@ const App: React.FC = () => {
                     </div>
 
                     <form onSubmit={handleSendMessage} className="relative group">
-                      <input 
+                      <input
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder="提供更多环境线索（如植物、天气、周围文字）..."
                         className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-6 pr-14 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-slate-600"
                         disabled={isProcessing}
                       />
-                      <button 
+                      <button
                         type="submit"
                         disabled={isProcessing || !inputValue.trim()}
                         className="absolute right-3 top-2.5 p-2.5 text-indigo-400 hover:text-indigo-300 disabled:text-slate-700 transition-colors"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                       </button>
                     </form>
@@ -240,7 +288,7 @@ const App: React.FC = () => {
             <div className="lg:col-span-5 sticky top-28">
               {error && (
                 <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl text-red-400 text-xs mb-8 flex items-start gap-4 backdrop-blur-md animate-in fade-in slide-in-from-right-4">
-                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                   <span>{error}</span>
@@ -263,7 +311,7 @@ const App: React.FC = () => {
                 )
               ) : (
                 <div className="vibrant-black-card p-8 rounded-3xl border border-white/10 shadow-2xl">
-                  <ImageMagicEditor 
+                  <ImageMagicEditor
                     originalImage={imageState.original}
                     onEdit={handleEdit}
                     isProcessing={isProcessing}
@@ -275,6 +323,12 @@ const App: React.FC = () => {
           </div>
         )}
       </main>
+      <SettingsModal
+        isOpen={showSettingsModal}
+        onSave={handleSaveSettings}
+        onClose={() => setShowSettingsModal(false)}
+        initialSettings={settings}
+      />
     </div>
   );
 };

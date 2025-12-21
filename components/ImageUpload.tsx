@@ -10,6 +10,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = ''; // Reset input to allow selecting the same file again
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -22,13 +23,13 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
 
   return (
     <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-slate-300 rounded-2xl bg-white hover:border-blue-500 transition-colors cursor-pointer group"
-         onClick={() => fileInputRef.current?.click()}>
-      <input 
-        type="file" 
-        ref={fileInputRef} 
-        onChange={handleFileChange} 
-        accept="image/*" 
-        className="hidden" 
+      onClick={() => fileInputRef.current?.click()}>
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+        className="hidden"
       />
       <div className="bg-blue-50 p-4 rounded-full mb-4 group-hover:bg-blue-100 transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -25,15 +25,15 @@ JSON 结构如下：
 注意：所有文本内容必须使用中文。`;
 
 // Start a location identification session
-export const startLocationSession = (base64Image: string) => {
-  // Always use new GoogleGenAI({ apiKey: process.env.API_KEY })
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+export const startLocationSession = (base64Image: string, apiKey: string, model: string = 'gemini-2.0-flash-exp') => {
+  // Use provided apiKey
+  const ai = new GoogleGenAI({ apiKey });
   const chat = ai.chats.create({
-    model: 'gemini-3-flash-preview',
+    model: model,
     config: {
       systemInstruction: SYSTEM_INSTRUCTION,
       responseMimeType: 'application/json',
-      temperature: 0.2 // 降低随机性以保证 JSON 稳定性
+      temperature: 0.2
     }
   });
 
@@ -56,7 +56,7 @@ export const sendCalibrationMessage = async (chat: Chat, message: any): Promise<
     // 清洗可能存在的 markdown 标记
     const cleanedJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
     const result = JSON.parse(cleanedJson) as AnalysisResult;
-    
+
     // 确保 topGuesses 始终是数组，防止前端渲染崩溃
     if (!Array.isArray(result.topGuesses)) {
       result.topGuesses = [];
@@ -69,10 +69,10 @@ export const sendCalibrationMessage = async (chat: Chat, message: any): Promise<
 };
 
 // Edit the uploaded image using AI
-export const editImageWithAI = async (base64Image: string, editPrompt: string): Promise<string> => {
-  // Always use new GoogleGenAI({ apiKey: process.env.API_KEY })
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  
+export const editImageWithAI = async (base64Image: string, editPrompt: string, apiKey: string, model: string = 'gemini-2.0-flash-exp'): Promise<string> => {
+  // Use provided apiKey
+  const ai = new GoogleGenAI({ apiKey });
+
   const imagePart = {
     inlineData: {
       mimeType: 'image/jpeg',
@@ -81,7 +81,7 @@ export const editImageWithAI = async (base64Image: string, editPrompt: string): 
   };
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-image',
+    model: model,
     contents: {
       parts: [
         imagePart,
