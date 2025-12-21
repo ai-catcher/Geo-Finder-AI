@@ -65,39 +65,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                             />
                         </div>
 
-                        {/* Model Selection Section */}
-                        <div className="space-y-2">
-                            <label htmlFor="model" className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
-                                AI 模型
+                        {/* Model Selection - Hidden/Fixed */}
+                        <div className="space-y-2 opacity-50 cursor-not-allowed">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
+                                AI 模型 (固定)
                             </label>
-                            <div className="relative">
-                                <select
-                                    id="model"
-                                    value={model}
-                                    onChange={(e) => setModel(e.target.value as GeminiModel)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none cursor-pointer"
-                                >
-                                    <option value={GeminiModel.GEMINI_2_0_FLASH_EXP} className="bg-[#0a0a0f]">Gemini 2.0 Flash Exp (推荐)</option>
-                                    <option value={GeminiModel.GEMINI_1_5_PRO} className="bg-[#0a0a0f]">Gemini 1.5 Pro</option>
-                                    <option value={GeminiModel.GEMINI_1_5_FLASH} className="bg-[#0a0a0f]">Gemini 1.5 Flash</option>
-                                </select>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                            <div className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm">
+                                Gemini 2.0 Flash Exp (最佳视觉模型)
                             </div>
-                            <p className="text-[10px] text-slate-500 px-1">
-                                2.0 Flash Exp 视觉能力最强；1.5 Pro 推理更深；1.5 Flash 速度最快。
-                            </p>
                         </div>
 
                         <button
                             type="submit"
                             disabled={!isValid}
                             className={`w-full py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 ${isValid
-                                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02]'
-                                    : 'bg-white/5 text-slate-500 cursor-not-allowed'
+                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02]'
+                                : 'bg-white/5 text-slate-500 cursor-not-allowed'
                                 }`}
                         >
                             保存设置

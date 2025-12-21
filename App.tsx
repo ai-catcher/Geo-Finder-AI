@@ -1,17 +1,15 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
-import { AppMode, ImageState, AnalysisResult, ChatMessage, GeminiModel, AppSettings } from './types';
-import { startLocationSession, sendCalibrationMessage, editImageWithAI } from './services/gemini';
+import { ImageState, AnalysisResult, ChatMessage, GeminiModel, AppSettings } from './types';
+import { startLocationSession, sendCalibrationMessage } from './services/gemini';
 import { ImageUpload } from './components/ImageUpload';
 import { LocationAnalysis } from './components/LocationAnalysis';
-import { ImageMagicEditor } from './components/ImageMagicEditor';
 import { LoadingOverlay } from './components/LoadingOverlay';
 
 import { SettingsModal } from './components/SettingsModal';
 
 const App: React.FC = () => {
-  const [mode, setMode] = useState<AppMode>(AppMode.IDENTIFY);
   const [imageState, setImageState] = useState<ImageState>({
     original: null,
     edited: null,
@@ -115,7 +113,7 @@ const App: React.FC = () => {
         analysis: result,
         chatHistory: [...prev.chatHistory, {
           role: 'model',
-          content: `收到了，正在基于“${userText}”情报重塑坐标系统...`,
+          content: result.explanation || `收到了，正在基于“${userText}”情报重塑坐标系统...`,
           result
         }]
       }));
@@ -126,27 +124,6 @@ const App: React.FC = () => {
     }
   };
 
-  // Fix: Added missing handleEdit function for image editing
-  const handleEdit = useCallback(async (prompt: string) => {
-    if (!imageState.original || isProcessing) return;
-    if (!settings.apiKey) {
-      setShowSettingsModal(true);
-      return;
-    }
-
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      const editedBase64 = await editImageWithAI(imageState.original, prompt, settings.apiKey, settings.model);
-      setImageState(prev => ({ ...prev, edited: editedBase64 }));
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "创意魔改失败，请尝试其他描述。");
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [imageState.original, isProcessing, settings]);
 
   // Reset the app state
   const reset = () => {
@@ -171,21 +148,29 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex gap-4">
-            <nav className="flex bg-white/5 p-1 rounded-2xl border border-white/10 shadow-inner">
-              <button
-                onClick={() => setMode(AppMode.IDENTIFY)}
-                className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${mode === AppMode.IDENTIFY ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}
-              >
-                识别与校准
-              </button>
-              <button
-                onClick={() => setMode(AppMode.EDIT)}
-                className={`px-5 py-2 rounded-xl text-xs font-black transition-all duration-300 ${mode === AppMode.EDIT ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}
-              >
-                创意魔改
-              </button>
-            </nav>
+          <div className="flex gap-4 items-center">
+            <a
+              href="https://x.com/thanksutrump"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              title="Follow on X"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a
+              href="https://github.com/ai-catcher/Geo-Finder-AI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              title="View on GitHub"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
+                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+              </svg>
+            </a>
             <button
               onClick={() => setShowSettingsModal(true)}
               className={`p-3 rounded-2xl border transition-all duration-300 ${settings.apiKey ? 'bg-white/5 border-white/10 text-slate-400 hover:text-white' : 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20'} `}
@@ -230,7 +215,7 @@ const App: React.FC = () => {
                       更换照片
                     </button>
                   </div>
-                  {isProcessing && mode === AppMode.IDENTIFY && (
+                  {isProcessing && (
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
                       <div className="flex flex-col items-center">
                         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div>
@@ -240,47 +225,45 @@ const App: React.FC = () => {
                   )}
                 </div>
 
-                {mode === AppMode.IDENTIFY && (
-                  <div className="p-6 border-t border-white/5 bg-black/40">
-                    <div className="h-[350px] overflow-y-auto mb-6 space-y-5 px-3 custom-scrollbar">
-                      {imageState.chatHistory.length === 0 && !isProcessing && (
-                        <div className="h-full flex items-center justify-center text-slate-600 text-sm italic">
-                          等待初步分析结果...
+                <div className="p-6 border-t border-white/5 bg-black/40">
+                  <div className="h-[350px] overflow-y-auto mb-6 space-y-5 px-3 custom-scrollbar">
+                    {imageState.chatHistory.length === 0 && !isProcessing && (
+                      <div className="h-full flex items-center justify-center text-slate-600 text-sm italic">
+                        等待初步分析结果...
+                      </div>
+                    )}
+                    {imageState.chatHistory.map((msg, i) => (
+                      <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}>
+                        <div className={`max-w-[90%] p-4 rounded-3xl text-sm leading-relaxed ${msg.role === 'user'
+                          ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-none shadow-lg'
+                          : 'bg-white/5 text-slate-300 border border-white/10 rounded-tl-none'
+                          }`}>
+                          {msg.content}
                         </div>
-                      )}
-                      {imageState.chatHistory.map((msg, i) => (
-                        <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}>
-                          <div className={`max-w-[90%] p-4 rounded-3xl text-sm leading-relaxed ${msg.role === 'user'
-                            ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-none shadow-lg'
-                            : 'bg-white/5 text-slate-300 border border-white/10 rounded-tl-none'
-                            }`}>
-                            {msg.content}
-                          </div>
-                        </div>
-                      ))}
-                      <div ref={chatEndRef} />
-                    </div>
-
-                    <form onSubmit={handleSendMessage} className="relative group">
-                      <input
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="提供更多环境线索（如植物、天气、周围文字）..."
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-6 pr-14 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-slate-600"
-                        disabled={isProcessing}
-                      />
-                      <button
-                        type="submit"
-                        disabled={isProcessing || !inputValue.trim()}
-                        className="absolute right-3 top-2.5 p-2.5 text-indigo-400 hover:text-indigo-300 disabled:text-slate-700 transition-colors"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </button>
-                    </form>
+                      </div>
+                    ))}
+                    <div ref={chatEndRef} />
                   </div>
-                )}
+
+                  <form onSubmit={handleSendMessage} className="relative group">
+                    <input
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      placeholder="提供更多环境线索（如植物、天气、周围文字）..."
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-6 pr-14 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-slate-600"
+                      disabled={isProcessing}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isProcessing || !inputValue.trim()}
+                      className="absolute right-3 top-2.5 p-2.5 text-indigo-400 hover:text-indigo-300 disabled:text-slate-700 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
 
@@ -295,28 +278,17 @@ const App: React.FC = () => {
                 </div>
               )}
 
-              {mode === AppMode.IDENTIFY ? (
-                imageState.analysis ? (
-                  <div className="vibrant-black-card p-8 rounded-3xl border border-white/10 shadow-2xl animate-in fade-in duration-500">
-                    <LocationAnalysis analysis={imageState.analysis} />
-                  </div>
-                ) : (
-                  <div className="vibrant-black-card p-24 flex flex-col items-center justify-center rounded-3xl border border-white/10">
-                    <div className="relative w-16 h-16">
-                      <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
-                      <div className="absolute inset-0 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div>
-                    </div>
-                    <p className="text-slate-500 text-sm mt-8 font-medium tracking-widest uppercase">深度算力接入中</p>
-                  </div>
-                )
+              {imageState.analysis ? (
+                <div className="vibrant-black-card p-8 rounded-3xl border border-white/10 shadow-2xl animate-in fade-in duration-500">
+                  <LocationAnalysis analysis={imageState.analysis} />
+                </div>
               ) : (
-                <div className="vibrant-black-card p-8 rounded-3xl border border-white/10 shadow-2xl">
-                  <ImageMagicEditor
-                    originalImage={imageState.original}
-                    onEdit={handleEdit}
-                    isProcessing={isProcessing}
-                    editedImage={imageState.edited}
-                  />
+                <div className="vibrant-black-card p-24 flex flex-col items-center justify-center rounded-3xl border border-white/10">
+                  <div className="relative w-16 h-16">
+                    <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div>
+                  </div>
+                  <p className="text-slate-500 text-sm mt-8 font-medium tracking-widest uppercase">深度算力接入中</p>
                 </div>
               )}
             </div>
