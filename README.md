@@ -1,27 +1,3 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1lYmN0MyUJYkRsvz34WN5x1uCRgGd-wKj
-
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
-
----
-
 ## 🛠️ 项目部署与使用指南 (中文)
 
 本指南将帮助您在本地环境搭建项目，或将其部署到生产环境。
@@ -44,26 +20,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1lYmN0MyUJYkRsvz34WN5x1
     npm install
     ```
 
-2.  **配置环境变量**
 
-    复制 `.env.example` 文件（如果存在）或直接新建 `.env.local` 文件，并填入您的 API 密钥：
-
-    ```bash
-    # 在项目根目录创建 .env.local
-    echo "GEMINI_API_KEY=your_api_key_here" > .env.local
-    ```
-
-    > ⚠️ **注意**: 请勿将 `.env.local` 提交到代码仓库，以免由于 API 密钥泄露导致安全问题。
-
-3.  **启动开发服务器**
-
-    运行以下命令启动本地开发预览：
-
-    ```bash
-    npm run dev
-    ```
-
-    终端将显示访问地址，通常为 `http://localhost:5173`。
 
 ### 📦 构建与生产 (Build & Production)
 

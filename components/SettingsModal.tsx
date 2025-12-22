@@ -13,6 +13,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
     const [apiKey, setApiKey] = useState(initialSettings.apiKey);
     const [model, setModel] = useState<GeminiModel>(initialSettings.model);
     const [isValid, setIsValid] = useState(false);
+    const [showApiKeyWarning, setShowApiKeyWarning] = useState(false);
 
     useEffect(() => {
         setApiKey(initialSettings.apiKey);
@@ -32,8 +33,49 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
         }
     };
 
+    const handleApiKeyClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setShowApiKeyWarning(true);
+    };
+
+    const confirmApiKeyRedirect = () => {
+        window.open("https://aistudio.google.com/app/apikey", "_blank");
+        setShowApiKeyWarning(false);
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
+            {/* API Key Warning Modal Overlay */}
+            {showApiKeyWarning && (
+                <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="bg-[#1a1a20] border border-red-500/30 p-6 rounded-2xl max-w-sm w-full shadow-2xl space-y-4">
+                        <div className="flex items-center gap-3 text-red-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <h3 className="font-bold text-lg">重要提示</h3>
+                        </div>
+                        <p className="text-slate-300 text-sm leading-relaxed">
+                            Gemini提供免费的apikey额度,但是谷歌账户需要绑定自己的信用卡(不会扣钱)才会生效
+                        </p>
+                        <div className="flex gap-3 pt-2">
+                            <button
+                                onClick={() => setShowApiKeyWarning(false)}
+                                className="flex-1 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 text-sm font-medium transition-colors"
+                            >
+                                取消
+                            </button>
+                            <button
+                                onClick={confirmApiKeyRedirect}
+                                className="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold shadow-lg shadow-indigo-500/20 transition-all"
+                            >
+                                前往获取
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="w-full max-w-md relative overflow-hidden rounded-3xl bg-[#0a0a0f] border border-white/10 shadow-2xl">
                 {/* Decorative elements */}
                 <div className="absolute -top-20 -left-20 w-40 h-40 bg-indigo-500/20 blur-[60px] rounded-full"></div>
@@ -65,13 +107,26 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                             />
                         </div>
 
-                        {/* Model Selection - Hidden/Fixed */}
-                        <div className="space-y-2 opacity-50 cursor-not-allowed">
+                        {/* Model Selection */}
+                        <div className="space-y-2">
                             <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
-                                AI 模型 (固定)
+                                AI 模型
                             </label>
-                            <div className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm">
-                                Gemini 2.0 Flash Exp (最佳视觉模型)
+                            <div className="relative">
+                                <select
+                                    value={model}
+                                    onChange={(e) => setModel(e.target.value as GeminiModel)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                                >
+                                    <option value={GeminiModel.GEMINI_3_0_FLASH} className="bg-[#0a0a0f]">Gemini 3.0 Flash (推荐)</option>
+                                    <option value={GeminiModel.GEMINI_3_0_PRO} className="bg-[#0a0a0f]">Gemini 3.0 Pro</option>
+                                    <option value={GeminiModel.GEMINI_2_0_FLASH_EXP} className="bg-[#0a0a0f]">Gemini 2.0 Flash Exp</option>
+                                </select>
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
 
@@ -88,14 +143,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                     </form>
 
                     <div className="mt-6 text-center">
-                        <a
-                            href="https://aistudio.google.com/app/apikey"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors border-b border-indigo-400/30 hover:border-indigo-300"
+                        <button
+                            onClick={handleApiKeyClick}
+                            className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors border-b border-indigo-400/30 hover:border-indigo-300 bg-transparent cursor-pointer"
                         >
-                            获取 Gemini API Key
-                        </a>
+                            获取 Gemini API Key (免费)
+                        </button>
                     </div>
                 </div>
             </div>

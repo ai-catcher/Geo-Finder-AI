@@ -24,8 +24,11 @@ export enum AppMode {
 }
 
 export enum GeminiModel {
-  GEMINI_2_0_FLASH_EXP = 'gemini-2.0-flash-exp'
+  GEMINI_2_0_FLASH_EXP = 'gemini-2.0-flash-exp',
+  GEMINI_3_0_FLASH = 'gemini-3-flash-preview',
+  GEMINI_3_0_PRO = 'gemini-3-pro-preview',
 }
+
 
 export interface AppSettings {
   apiKey: string;

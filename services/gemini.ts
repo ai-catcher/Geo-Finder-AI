@@ -25,9 +25,10 @@ JSON 结构如下：
 注意：所有文本内容必须使用中文。`;
 
 // Start a location identification session
-export const startLocationSession = (base64Image: string, apiKey: string, model: string = 'gemini-2.0-flash-exp') => {
+export const startLocationSession = (base64Image: string, apiKey: string, model: string = 'gemini-3-flash-preview') => {
   // Use provided apiKey
-  const ai = new GoogleGenAI({ apiKey });
+  // @ts-ignore - configured for v1alpha if supported by SDK, otherwise relying on model routing
+  const ai = new GoogleGenAI({ apiKey, apiVersion: 'v1alpha' });
   const chat = ai.chats.create({
     model: model,
     config: {
@@ -69,9 +70,9 @@ export const sendCalibrationMessage = async (chat: Chat, message: any): Promise<
 };
 
 // Edit the uploaded image using AI
-export const editImageWithAI = async (base64Image: string, editPrompt: string, apiKey: string, model: string = 'gemini-2.0-flash-exp'): Promise<string> => {
+export const editImageWithAI = async (base64Image: string, editPrompt: string, apiKey: string, model: string = 'gemini-3-flash-preview'): Promise<string> => {
   // Use provided apiKey
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey, apiVersion: 'v1alpha' });
 
   const imagePart = {
     inlineData: {
