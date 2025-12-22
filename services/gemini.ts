@@ -3,8 +3,19 @@ import { GoogleGenAI, Chat } from "@google/genai";
 import { AnalysisResult } from "../types";
 
 // The system instruction for the geo-analysis expert
-// The system instruction for the geo-analysis expert
-const getSystemInstruction = (lang: string) => `你是一位顶尖的地理情报分析专家。
+const getSystemInstruction = (lang: string) => {
+  const langMap: Record<string, string> = {
+    'zh-CN': 'Simplified Chinese', 'zh-TW': 'Traditional Chinese', 'en': 'English',
+    'ko': 'Korean', 'ja': 'Japanese', 'hi': 'Hindi', 'es': 'Spanish', 'ar': 'Arabic',
+    'fr': 'French', 'bn': 'Bengali', 'pt': 'Portuguese', 'ru': 'Russian', 'id': 'Indonesian',
+    'ur': 'Urdu', 'de': 'German', 'pcm': 'Nigerian Pidgin', 'arz': 'Egyptian Arabic',
+    'mr': 'Marathi', 'vi': 'Vietnamese', 'te': 'Telugu', 'tr': 'Turkish',
+    'pnb': 'Western Punjabi', 'sw': 'Swahili', 'tl': 'Tagalog', 'ta': 'Tamil',
+    'fa': 'Persian', 'th': 'Thai', 'jv': 'Javanese'
+  };
+  const targetLang = langMap[lang] || 'Simplified Chinese';
+
+  return `你是一位顶尖的地理情报分析专家。
 你的核心能力是通过图片中的视觉线索锁定地理位置，并能根据用户后续的补充描述进行“动态校准”。
 
 工作流程：
@@ -23,7 +34,8 @@ JSON 结构如下：
   ],
   "explanation": "简明扼要的推理总结"
 }
-注意：所有文本内容必须使用${lang === 'en' ? 'English' : (lang === 'ko' ? 'Korean' : (lang === 'ja' ? 'Japanese' : (lang === 'zh-TW' ? 'Traditional Chinese' : 'Simplified Chinese')))}。`;
+注意：所有文本内容必须使用${targetLang}。`;
+};
 
 // Start a location identification session
 export const startLocationSession = (base64Image: string, apiKey: string, model: string = 'gemini-3-flash-preview', language: string = 'zh-CN') => {

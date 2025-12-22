@@ -80,10 +80,16 @@ const App: React.FC = () => {
       // Better: pass the instruction instructions via specific method or just standard prompt
 
       // Map language code to human-readable name for the prompt text
-      const langName = language === 'en' ? 'English' :
-        (language === 'ko' ? 'Korean' :
-          (language === 'ja' ? 'Japanese' :
-            (language === 'zh-TW' ? 'Traditional Chinese' : 'Simplified Chinese')));
+      const langMap: Record<string, string> = {
+        'zh-CN': 'Simplified Chinese', 'zh-TW': 'Traditional Chinese', 'en': 'English',
+        'ko': 'Korean', 'ja': 'Japanese', 'hi': 'Hindi', 'es': 'Spanish', 'ar': 'Arabic',
+        'fr': 'French', 'bn': 'Bengali', 'pt': 'Portuguese', 'ru': 'Russian', 'id': 'Indonesian',
+        'ur': 'Urdu', 'de': 'German', 'pcm': 'Nigerian Pidgin', 'arz': 'Egyptian Arabic',
+        'mr': 'Marathi', 'vi': 'Vietnamese', 'te': 'Telugu', 'tr': 'Turkish',
+        'pnb': 'Western Punjabi', 'sw': 'Swahili', 'tl': 'Tagalog', 'ta': 'Tamil',
+        'fa': 'Persian', 'th': 'Thai', 'jv': 'Javanese'
+      };
+      const langName = langMap[language] || 'Simplified Chinese';
 
       const result = await sendCalibrationMessage(chat, [imagePart, { text: t('initial_prompt', { lang: langName }) }]);
 

@@ -18,18 +18,42 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
         if (savedLang && LANGUAGES[savedLang]) {
             setLanguageState(savedLang);
         } else {
-            // Simple browser detection detection
-            const browserLang = navigator.language;
-            if (browserLang.includes('zh-TW') || browserLang.includes('zh-HK')) {
-                setLanguageState('zh-TW');
-            } else if (browserLang.includes('en')) {
-                setLanguageState('en');
-            } else if (browserLang.includes('ko')) {
-                setLanguageState('ko');
-            } else if (browserLang.includes('ja')) {
-                setLanguageState('ja');
+            // Robust browser detection
+            const browserLang = navigator.language.toLowerCase(); // e.g., 'en-US', 'zh-CN', 'es-ES'
+            const shortLang = browserLang.split('-')[0]; // e.g., 'en', 'zh', 'es'
+
+            // Direct match check
+            let foundLang: Language | undefined;
+
+            // 1. Exact match
+            const exactMatches = Object.keys(LANGUAGES).filter(lang => lang.toLowerCase() === browserLang);
+            if (exactMatches.length > 0) {
+                foundLang = exactMatches[0] as Language;
             }
-            // Default stays zh-CN
+            // 2. Short match
+            else {
+                const shortMatches = Object.keys(LANGUAGES).filter(lang => lang.split('-')[0] === shortLang);
+                if (shortMatches.length > 0) {
+                    // Bias towards main dialet (e.g. pt -> pt, not implicit) but here keys are specific. 
+                    // If shortLang is 'ar', we match 'ar' (standard) not 'arz' unless 'arz' is explicitly requested
+                    if (Object.keys(LANGUAGES).includes(shortLang)) {
+                        foundLang = shortLang as Language;
+                    } else {
+                        foundLang = shortMatches[0] as Language;
+                    }
+                }
+            }
+
+            // 3. Specific mappings
+            if (browserLang === 'zh-hk' || browserLang === 'zh-mo') {
+                foundLang = 'zh-TW';
+            }
+
+            if (foundLang) {
+                setLanguageState(foundLang);
+            } else {
+                setLanguageState('zh-CN'); // Default Fallback
+            }
         }
     }, []);
 
