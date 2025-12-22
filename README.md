@@ -2,6 +2,9 @@
 
 本指南将帮助您在本地环境搭建项目，或将其部署到生产环境。
 
+在线体验地址：
+https://ai-catcher.github.io/Geo-Finder-AI/dist/
+
 ### 📋 环境准备 (Prerequisites)
 
 在开始之前，请确保您的开发环境已满足以下要求：
