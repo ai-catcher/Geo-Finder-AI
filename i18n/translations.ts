@@ -63,7 +63,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: '支持 PNG, JPG 或 WebP (最大 10MB)',
         best_guess: '最优预测',
         candidates_list: '候选清单',
-        expert_consensus: '专家共识'
+        expert_consensus: '专家共识',
+        ai_model: 'AI 模型',
+        api_warning_title: 'API 密钥提示',
+        api_warning_msg: '请注意：Gemini API 需要绑定支付方式（信用卡）才能正常使用。',
+        get_api_key_btn: '获取 Gemini API 密钥 (免费)',
+        cancel: '取消',
+        go_get: '前往获取'
     },
     'zh-TW': {
         app_title: '看圖尋地',
@@ -87,7 +93,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: '支持 PNG, JPG 或 WebP (最大 10MB)',
         best_guess: '最優預測',
         candidates_list: '候選清單',
-        expert_consensus: '專家共識'
+        expert_consensus: '專家共識',
+        ai_model: 'AI 模型',
+        api_warning_title: 'API 金鑰提示',
+        api_warning_msg: '請注意：Gemini API 需要綁定支付方式（信用卡）才能正常使用。',
+        get_api_key_btn: '獲取 Gemini API 金鑰 (免費)',
+        cancel: '取消',
+        go_get: '前往獲取'
     },
     'en': {
         app_title: 'GeoVision',
@@ -111,7 +123,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Supports PNG, JPG or WebP (Max 10MB)',
         best_guess: 'Best Prediction',
         candidates_list: 'Candidate List',
-        expert_consensus: 'Expert Consensus'
+        expert_consensus: 'Expert Consensus',
+        ai_model: 'AI Model',
+        api_warning_title: 'API Key Notice',
+        api_warning_msg: 'Note: Gemini API requires a payment method (credit card) to function.',
+        get_api_key_btn: 'Get Gemini API Key (Free)',
+        cancel: 'Cancel',
+        go_get: 'Get It'
     },
     'ko': {
         app_title: '지오비전',
@@ -135,7 +153,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG, JPG 또는 WebP 지원 (최대 10MB)',
         best_guess: '최고의 예측',
         candidates_list: '후보 목록',
-        expert_consensus: '전문가 합의'
+        expert_consensus: '전문가 합의',
+        ai_model: 'AI 모델',
+        api_warning_title: 'API 키 알림',
+        api_warning_msg: '참고: Gemini API를 사용하려면 지불 방법(신용 카드)을 등록해야 합니다.',
+        get_api_key_btn: 'Gemini API 키 받기 (무료)',
+        cancel: '취소',
+        go_get: '받으러 가기'
     },
     'ja': {
         app_title: 'ジオビジョン',
@@ -159,7 +183,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG、JPG、またはWebPをサポート（最大10MB）',
         best_guess: '最良の予測',
         candidates_list: '候補リスト',
-        expert_consensus: '専門家の合意'
+        expert_consensus: '専門家の合意',
+        ai_model: 'AIモデル',
+        api_warning_title: 'APIキーの通知',
+        api_warning_msg: '注意：Gemini APIを使用するには、支払い方法（クレジットカード）の登録が必要です。',
+        get_api_key_btn: 'Gemini APIキーを取得 (無料)',
+        cancel: 'キャンセル',
+        go_get: '取得する'
     },
     'hi': {
         app_title: 'जियोविजन',
@@ -183,7 +213,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG, JPG या WebP का समर्थन करता है (अधिकतम 10MB)',
         best_guess: 'सर्वोत्तम भविष्यवाणी',
         candidates_list: 'उम्मीदवार सूची',
-        expert_consensus: 'विशेषज्ञ सहमति'
+        expert_consensus: 'विशेषज्ञ सहमति',
+        ai_model: 'AI मॉडल',
+        api_warning_title: 'API कुंजी सूचना',
+        api_warning_msg: 'नोट: जेमिनी एपीआई को कार्य करने के लिए क्रेडिट कार्ड बाइंडिंग की आवश्यकता होती है।',
+        get_api_key_btn: 'Gemini API कुंजी प्राप्त करें (निःशुल्क)',
+        cancel: 'रद्द करें',
+        go_get: 'इसे प्राप्त करें'
     },
     'es': {
         app_title: 'GeoVisión',
@@ -231,7 +267,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'يدعم PNG و JPG و WebP (بحد أقصى 10 ميجابايت)',
         best_guess: 'أفضل توقع',
         candidates_list: 'قائمة المرشحين',
-        expert_consensus: 'توافق الخبراء'
+        expert_consensus: 'توافق الخبراء',
+        ai_model: 'AI Model',
+        api_warning_title: 'إشعار مفتاح API',
+        api_warning_msg: 'ملاحظة: يتطلب Gemini API ربط بطاقة ائتمان.',
+        get_api_key_btn: 'احصل على مفتاح Gemini API (مجاني)',
+        cancel: 'إلغاء',
+        go_get: 'احصل عليه'
     },
     'fr': {
         app_title: 'GéoVision',
@@ -255,7 +297,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Supporte PNG, JPG ou WebP (Max 10MB)',
         best_guess: 'Meilleure Prédiction',
         candidates_list: 'Liste des Candidats',
-        expert_consensus: 'Consensus d\'Experts'
+        expert_consensus: 'Consensus d\'Experts',
+        ai_model: 'Modèle IA',
+        api_warning_title: 'Avis Clé API',
+        api_warning_msg: 'Note : L\'API Gemini nécessite une carte de crédit liée.',
+        get_api_key_btn: 'Obtenir la clé API Gemini (Gratuit)',
+        cancel: 'Annuler',
+        go_get: 'Obtenir'
     },
     'bn': {
         app_title: 'জিওভিশন',
@@ -279,7 +327,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG, JPG বা WebP সমর্থন করে (সর্বোচ্চ ১০MB)',
         best_guess: 'সেরা পূর্বাভাস',
         candidates_list: 'প্রার্থী তালিকা',
-        expert_consensus: 'বিশেষজ্ঞ ঐক্যমত'
+        expert_consensus: 'বিশেষজ্ঞ ঐক্যমত',
+        ai_model: 'AI মডেল',
+        api_warning_title: 'API কী বিজ্ঞপ্তি',
+        api_warning_msg: 'দ্রষ্টব্য: জেমিনি এপিআই-এর একটি ক্রেডিট কার্ড বাইन्डिং প্রয়োজন।',
+        get_api_key_btn: 'জেমিনি API কী পান (বিনামূল্যে)',
+        cancel: 'বাতিল',
+        go_get: 'এটি পান'
     },
     'pt': {
         app_title: 'GeoVisão',
@@ -303,7 +357,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Suporta PNG, JPG ou WebP (Máx 10MB)',
         best_guess: 'Melhor Previsão',
         candidates_list: 'Lista de Candidatos',
-        expert_consensus: 'Consenso de Especialistas'
+        expert_consensus: 'Consenso de Especialistas',
+        ai_model: 'Modelo de IA',
+        api_warning_title: 'Aviso da Chave API',
+        api_warning_msg: 'Nota: A API Gemini requer um cartão de crédito vinculado.',
+        get_api_key_btn: 'Obter Chave API Gemini (Grátis)',
+        cancel: 'Cancelar',
+        go_get: 'Obter'
     },
     'ru': {
         app_title: 'ГеоВижн',
@@ -327,7 +387,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Поддержка PNG, JPG или WebP (Макс 10MB)',
         best_guess: 'Лучший Прогноз',
         candidates_list: 'Список Кандидатов',
-        expert_consensus: 'Консенсус Экспертов'
+        expert_consensus: 'Консенсус Экспертов',
+        ai_model: 'ИИ Модель',
+        api_warning_title: 'Уведомление API ключа',
+        api_warning_msg: 'Примечание: API Gemini требует привязки кредитной карты.',
+        get_api_key_btn: 'Получить API ключ Gemini (Бесплатно)',
+        cancel: 'Отмена',
+        go_get: 'Получить'
     },
     'id': {
         app_title: 'GeoVisi',
@@ -351,7 +417,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Mendukung PNG, JPG atau WebP (Maks 10MB)',
         best_guess: 'Prediksi Terbaik',
         candidates_list: 'Daftar Kandidat',
-        expert_consensus: 'Konsensus Ahli'
+        expert_consensus: 'Konsensus Ahli',
+        ai_model: 'Model AI',
+        api_warning_title: 'Pemberitahuan Kunci API',
+        api_warning_msg: 'Catatan: API Gemini memerlukan pengikatan kartu kredit.',
+        get_api_key_btn: 'Dapatkan Kunci API Gemini (Gratis)',
+        cancel: 'Batal',
+        go_get: 'Dapatkan'
     },
     'ur': {
         app_title: 'جیوویژن',
@@ -375,7 +447,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG، JPG یا WebP (زیادہ سے زیادہ 10MB) کو سپورٹ کرتا ہے',
         best_guess: 'بہترین پیشین گوئی',
         candidates_list: 'امیدواروں کی فہرست',
-        expert_consensus: 'ماہرین کا اتفاق رائے'
+        expert_consensus: 'ماہرین کا اتفاق رائے',
+        ai_model: 'AI ماڈل',
+        api_warning_title: 'API کلید نوٹس',
+        api_warning_msg: 'نوٹ: Gemini API کے لیے کریڈٹ کارڈ بائنڈنگ کی ضرورت ہے۔',
+        get_api_key_btn: 'Gemini API کلید حاصل کریں (مفت)',
+        cancel: 'منسوخ کریں',
+        go_get: 'حاصل کریں'
     },
     'de': {
         app_title: 'GeoVision',
@@ -399,7 +477,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Unterstützt PNG, JPG oder WebP (Max 10MB)',
         best_guess: 'Beste Vorhersage',
         candidates_list: 'Kandidatenliste',
-        expert_consensus: 'Expertenkonsens'
+        expert_consensus: 'Expertenkonsens',
+        ai_model: 'KI-Modell',
+        api_warning_title: 'API-Schlüssel Hinweis',
+        api_warning_msg: 'Hinweis: Die Gemini-API erfordert eine Kreditkartenbindung.',
+        get_api_key_btn: 'Gemini API-Schlüssel erhalten (Kostenlos)',
+        cancel: 'Abbrechen',
+        go_get: 'Holen'
     },
     'pcm': {
         app_title: 'GeoVision',
@@ -423,7 +507,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Support PNG, JPG or WebP (Max 10MB)',
         best_guess: 'Best Guess',
         candidates_list: 'Candidate List',
-        expert_consensus: 'Expert Agreement'
+        expert_consensus: 'Expert Agreement',
+        ai_model: 'AI Model',
+        api_warning_title: 'API Key Notice',
+        api_warning_msg: 'Note: Gemini API requires say you bind credit card.',
+        get_api_key_btn: 'Get Gemini API Key (Free)',
+        cancel: 'Cancel',
+        go_get: 'Get Am'
     },
     'arz': {
         app_title: 'جيوفيجن',
@@ -447,7 +537,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'بيدعم PNG و JPG و WebP (أقصى حاجة 10 ميجا)',
         best_guess: 'أحسن تخمين',
         candidates_list: 'قائمة المرشحين',
-        expert_consensus: 'رأي الخبراء'
+        expert_consensus: 'رأي الخبراء',
+        ai_model: 'AI Model',
+        api_warning_title: 'تنبيه مفتاح API',
+        api_warning_msg: 'ملحوظة: Gemini API محتاج فيزا كارت عشان يشتغل.',
+        get_api_key_btn: 'هات مفتاح Gemini API (مجاني)',
+        cancel: 'إلغاء',
+        go_get: 'هاته'
     },
     'mr': {
         app_title: 'जिओव्हिजन',
@@ -471,7 +567,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG, JPG किंवा WebP ला समर्थन देते (जास्तीत जास्त 10MB)',
         best_guess: 'सर्वोत्तम अंदाज',
         candidates_list: 'उमेदवार यादी',
-        expert_consensus: 'तज्ञांचे मत'
+        expert_consensus: 'तज्ञांचे मत',
+        ai_model: 'AI मॉडेल',
+        api_warning_title: 'API की सूचना',
+        api_warning_msg: 'टीप: Gemini API ला क्रेडिट कार्ड बाइंडिंग आवश्यक आहे.',
+        get_api_key_btn: 'Gemini API की मिळवा (मोफत)',
+        cancel: 'रद्द करा',
+        go_get: 'ते मिळवा'
     },
     'vi': {
         app_title: 'GeoVision',
@@ -495,7 +597,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Hỗ trợ PNG, JPG hoặc WebP (Tối đa 10MB)',
         best_guess: 'Dự đoán Tốt nhất',
         candidates_list: 'Danh sách Ứng viên',
-        expert_consensus: 'Đồng thuận Chuyên gia'
+        expert_consensus: 'Đồng thuận Chuyên gia',
+        ai_model: 'Mô hình AI',
+        api_warning_title: 'Thông báo Khóa API',
+        api_warning_msg: 'Lưu ý: API Gemini yêu cầu liên kết thẻ tín dụng.',
+        get_api_key_btn: 'Nhận Khóa API Gemini (Miễn phí)',
+        cancel: 'Hủy',
+        go_get: 'Nhận'
     },
     'te': {
         app_title: 'జియోవిజన్',
@@ -519,7 +627,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG, JPG లేదా WebPకి మద్దతు ఇస్తుంది (గరిష్టంగా 10MB)',
         best_guess: 'ఉత్తమ అంచనా',
         candidates_list: 'అభ్యర్థి జాబితా',
-        expert_consensus: 'నిపుణుల ఏకాభిప్రాయం'
+        expert_consensus: 'నిపుణుల ఏకాభిప్రాయం',
+        ai_model: 'AI మోడల్',
+        api_warning_title: 'API కీ గమనిక',
+        api_warning_msg: 'గమనిక: Gemini APIకి క్రెడిట్ కార్డ్ బైండింగ్ అవసరం.',
+        get_api_key_btn: 'Gemini API కీ పొందండి (ఉచితం)',
+        cancel: 'రద్దు చేయి',
+        go_get: 'పొందండి'
     },
     'tr': {
         app_title: 'GeoVision',
@@ -543,7 +657,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG, JPG veya WebP desteklenir (Maks 10MB)',
         best_guess: 'En İyi Tahmin',
         candidates_list: 'Aday Listesi',
-        expert_consensus: 'Uzman Görüşü'
+        expert_consensus: 'Uzman Görüşü',
+        ai_model: 'Yapay Zeka Modeli',
+        api_warning_title: 'API Anahtarı Bildirimi',
+        api_warning_msg: 'Not: Gemini API, kredi kartı bağlanmasını gerektirir.',
+        get_api_key_btn: 'Gemini API Anahtarını Al (Ücretsiz)',
+        cancel: 'İptal',
+        go_get: 'Al'
     },
     'pnb': {
         app_title: 'جیوویژن',
@@ -567,7 +687,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG، JPG یا WebP (زیادہ توں زیادہ 10MB) نوں سپورٹ کردا اے',
         best_guess: 'بہترین اندازہ',
         candidates_list: 'امیدوار لسٹ',
-        expert_consensus: 'ماہرین دی رائے'
+        expert_consensus: 'ماہرین دی رائے',
+        ai_model: 'AI ماڈل',
+        api_warning_title: 'API کنجی نوٹس',
+        api_warning_msg: 'نوٹ: Gemini API لئی کریڈٹ کارڈ دی لوڑ اے۔',
+        get_api_key_btn: 'Gemini API کنجی حاصل کرو (مفت)',
+        cancel: 'منسوخ کرو',
+        go_get: 'حاصل کرو'
     },
     'sw': {
         app_title: 'GeoVision',
@@ -591,7 +717,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Inasaidia PNG, JPG au WebP (Upeo 10MB)',
         best_guess: 'Utabiri Bora',
         candidates_list: 'Orodha ya Wagombea',
-        expert_consensus: 'Makubaliano ya Wataalamu'
+        expert_consensus: 'Makubaliano ya Wataalamu',
+        ai_model: 'Mfano wa AI',
+        api_warning_title: 'Notisi ya Ufunguo wa API',
+        api_warning_msg: 'Kumbuka: API ya Gemini inahitaji kuunganishwa kwa kadi ya mkopo.',
+        get_api_key_btn: 'Pata Ufunguo wa API wa Gemini (Bure)',
+        cancel: 'Ghairi',
+        go_get: 'Pata'
     },
     'tl': {
         app_title: 'GeoVision',
@@ -615,7 +747,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Sumusuporta sa PNG, JPG o WebP (Max 10MB)',
         best_guess: 'Pinakamahusay na Hula',
         candidates_list: 'Listahan ng Kandidato',
-        expert_consensus: 'Kasunduan ng Eksperto'
+        expert_consensus: 'Kasunduan ng Eksperto',
+        ai_model: 'AI Model',
+        api_warning_title: 'Paunawa sa API Key',
+        api_warning_msg: 'Tandaan: Ang Gemini API ay nangangailangan ng credit card binding.',
+        get_api_key_btn: 'Kumuha ng Gemini API Key (Libre)',
+        cancel: 'Kanselahin',
+        go_get: 'Kunin Ito'
     },
     'ta': {
         app_title: 'ஜியோவிஷன்',
@@ -639,7 +777,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'PNG, JPG அல்லது WebP ஐ ஆதரிக்கிறது (அதிகபட்சம் 10MB)',
         best_guess: 'சிறந்த கணிப்பு',
         candidates_list: 'வேட்பாளர் பட்டியல்',
-        expert_consensus: 'நிபுணர் ஒருமித்த கருத்து'
+        expert_consensus: 'நிபுணர் ஒருமித்த கருத்து',
+        ai_model: 'AI மாதிரி',
+        api_warning_title: 'API திறவுகோல் அறிவிப்பு',
+        api_warning_msg: 'குறிப்பு: ஜெமினி ஏபிஐக்கு கிரெடிட் கார்டு பிணைப்பு தேவை.',
+        get_api_key_btn: 'ஜெமினி ஏபிஐ திறவுகோலைப் பெறுங்கள் (இலவசம்)',
+        cancel: 'ரத்துசெய்',
+        go_get: 'பெறுங்கள்'
     },
     'fa': {
         app_title: 'ژئوویژن',
@@ -663,7 +807,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'پشتیبانی از PNG، JPG یا WebP (حداکثر ۱۰ مگابایت)',
         best_guess: 'بهترین پیش‌بینی',
         candidates_list: 'لیست نامزدها',
-        expert_consensus: 'توافق نظر کارشناسان'
+        expert_consensus: 'توافق نظر کارشناسان',
+        ai_model: 'مدل هوش مصنوعی',
+        api_warning_title: 'اطلاعیه کلید API',
+        api_warning_msg: 'توجه: API جمینای نیاز به اتصال کارت اعتباری دارد.',
+        get_api_key_btn: 'دریافت کلید API جمینای (رایگان)',
+        cancel: 'لغو',
+        go_get: 'دریافت'
     },
     'th': {
         app_title: 'GeoVision',
@@ -687,7 +837,13 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'รองรับ PNG, JPG หรือ WebP (สูงสุด 10MB)',
         best_guess: 'การคาดการณ์ที่ดีที่สุด',
         candidates_list: 'รายชื่อผู้สมัคร',
-        expert_consensus: 'ความเห็นพ้องของผู้เชี่ยวชาญ'
+        expert_consensus: 'ความเห็นพ้องของผู้เชี่ยวชาญ',
+        ai_model: 'โมเดล AI',
+        api_warning_title: 'ประกาศคีย์ API',
+        api_warning_msg: 'หมายเหตุ: Gemini API ต้องผูกบัตรเครดิต',
+        get_api_key_btn: 'รับคีย์ Gemini API (ฟรี)',
+        cancel: 'ยกเลิก',
+        go_get: 'รับเลย'
     },
     'jv': {
         app_title: 'GeoVision',
@@ -711,6 +867,12 @@ export const translations: Record<Language, Record<string, string>> = {
         drag_drop_sub: 'Dhukungan PNG, JPG utawa WebP (Maks 10MB)',
         best_guess: 'Prediksi Paling Apik',
         candidates_list: 'Dhaptar Calon',
-        expert_consensus: 'Kesepakatan Pakar'
+        expert_consensus: 'Kesepakatan Pakar',
+        ai_model: 'Model AI',
+        api_warning_title: 'Wara-wara Kunci API',
+        api_warning_msg: 'Cathetan: Gemini API mbutuhake nalikat kertu kredit.',
+        get_api_key_btn: 'Entuk Kunci API Gemini (Gratis)',
+        cancel: 'Batal',
+        go_get: 'Jupuk'
     }
 };

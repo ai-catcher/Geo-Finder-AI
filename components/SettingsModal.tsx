@@ -55,23 +55,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
-                            <h3 className="font-bold text-lg">{t('expert_consensus')}</h3>
+                            <h3 className="font-bold text-lg">{t('api_warning_title')}</h3>
                         </div>
                         <p className="text-slate-300 text-sm leading-relaxed">
-                            {t('error_calibration')}
+                            {t('api_warning_msg')}
                         </p>
                         <div className="flex gap-3 pt-2">
                             <button
                                 onClick={() => setShowApiKeyWarning(false)}
                                 className="flex-1 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 text-sm font-medium transition-colors"
                             >
-                                取消
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={confirmApiKeyRedirect}
                                 className="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold shadow-lg shadow-indigo-500/20 transition-all"
                             >
-                                前往获取
+                                {t('go_get')}
                             </button>
                         </div>
                     </div>
@@ -112,7 +112,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                         {/* Model Selection */}
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
-                                AI 模型
+                                {t('ai_model')}
                             </label>
                             <div className="relative">
                                 <select
@@ -149,7 +149,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                             onClick={handleApiKeyClick}
                             className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors border-b border-indigo-400/30 hover:border-indigo-300 bg-transparent cursor-pointer"
                         >
-                            {t('settings_tooltip')}
+                            {t('get_api_key_btn')}
                         </button>
                     </div>
                 </div>
