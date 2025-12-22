@@ -3,7 +3,8 @@ import { GoogleGenAI, Chat } from "@google/genai";
 import { AnalysisResult } from "../types";
 
 // The system instruction for the geo-analysis expert
-const SYSTEM_INSTRUCTION = `你是一位顶尖的地理情报分析专家。
+// The system instruction for the geo-analysis expert
+const getSystemInstruction = (lang: string) => `你是一位顶尖的地理情报分析专家。
 你的核心能力是通过图片中的视觉线索锁定地理位置，并能根据用户后续的补充描述进行“动态校准”。
 
 工作流程：
@@ -22,17 +23,17 @@ JSON 结构如下：
   ],
   "explanation": "简明扼要的推理总结"
 }
-注意：所有文本内容必须使用中文。`;
+注意：所有文本内容必须使用${lang === 'en' ? 'English' : (lang === 'ko' ? 'Korean' : (lang === 'ja' ? 'Japanese' : (lang === 'zh-TW' ? 'Traditional Chinese' : 'Simplified Chinese')))}。`;
 
 // Start a location identification session
-export const startLocationSession = (base64Image: string, apiKey: string, model: string = 'gemini-3-flash-preview') => {
+export const startLocationSession = (base64Image: string, apiKey: string, model: string = 'gemini-3-flash-preview', language: string = 'zh-CN') => {
   // Use provided apiKey
   // @ts-ignore - configured for v1alpha if supported by SDK, otherwise relying on model routing
   const ai = new GoogleGenAI({ apiKey, apiVersion: 'v1alpha' });
   const chat = ai.chats.create({
     model: model,
     config: {
-      systemInstruction: SYSTEM_INSTRUCTION,
+      systemInstruction: getSystemInstruction(language),
       responseMimeType: 'application/json',
       temperature: 0.2
     }

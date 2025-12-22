@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { GeminiModel, AppSettings } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SettingsModalProps {
     isOpen: boolean;
@@ -14,6 +15,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
     const [model, setModel] = useState<GeminiModel>(initialSettings.model);
     const [isValid, setIsValid] = useState(false);
     const [showApiKeyWarning, setShowApiKeyWarning] = useState(false);
+    const { t } = useLanguage();
 
     useEffect(() => {
         setApiKey(initialSettings.apiKey);
@@ -53,10 +55,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
-                            <h3 className="font-bold text-lg">重要提示</h3>
+                            <h3 className="font-bold text-lg">{t('expert_consensus')}</h3>
                         </div>
                         <p className="text-slate-300 text-sm leading-relaxed">
-                            Gemini提供免费的apikey额度,但是谷歌账户需要绑定自己的信用卡(不会扣钱)才会生效
+                            {t('error_calibration')}
                         </p>
                         <div className="flex gap-3 pt-2">
                             <button
@@ -83,7 +85,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
 
                 <div className="relative p-8">
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-black text-white tracking-tight">设置</h2>
+                        <h2 className="text-2xl font-black text-white tracking-tight">{t('settings_tooltip')}</h2>
                         <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -138,7 +140,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                                 : 'bg-white/5 text-slate-500 cursor-not-allowed'
                                 }`}
                         >
-                            保存设置
+                            {t('identify_btn')}
                         </button>
                     </form>
 
@@ -147,7 +149,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                             onClick={handleApiKeyClick}
                             className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors border-b border-indigo-400/30 hover:border-indigo-300 bg-transparent cursor-pointer"
                         >
-                            获取 Gemini API Key (免费)
+                            {t('settings_tooltip')}
                         </button>
                     </div>
                 </div>

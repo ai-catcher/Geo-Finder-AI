@@ -10,6 +10,7 @@ export const LANGUAGES: Record<Language, { nativeName: string; flag: string }> =
 
 export const translations: Record<Language, Record<string, string>> = {
     'zh-CN': {
+        app_title: '看图寻地',
         subtitle: '30点量子校准',
         identify_btn: '识别与校准',
         settings_tooltip: 'API 密钥与设置',
@@ -33,6 +34,7 @@ export const translations: Record<Language, Record<string, string>> = {
         expert_consensus: '专家共识'
     },
     'zh-TW': {
+        app_title: '看圖尋地',
         subtitle: '30點量子校準',
         identify_btn: '識別與校準',
         settings_tooltip: 'API 金鑰與設定',
@@ -56,6 +58,7 @@ export const translations: Record<Language, Record<string, string>> = {
         expert_consensus: '專家共識'
     },
     'en': {
+        app_title: 'GeoVision',
         subtitle: '30-Points Quantum Calibration',
         identify_btn: 'Identify & Calibrate',
         settings_tooltip: 'API Key & Settings',
@@ -79,6 +82,7 @@ export const translations: Record<Language, Record<string, string>> = {
         expert_consensus: 'Expert Consensus'
     },
     'ko': {
+        app_title: '지오비전',
         subtitle: '30포인트 양자 보정',
         identify_btn: '식별 및 보정',
         settings_tooltip: 'API 키 및 설정',
@@ -102,6 +106,7 @@ export const translations: Record<Language, Record<string, string>> = {
         expert_consensus: '전문가 합의'
     },
     'ja': {
+        app_title: 'ジオビジョン',
         subtitle: '30点量子キャリブレーション',
         identify_btn: '識別と修正',
         settings_tooltip: 'APIキーと設定',

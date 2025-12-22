@@ -8,8 +8,11 @@ import { LocationAnalysis } from './components/LocationAnalysis';
 import { LoadingOverlay } from './components/LoadingOverlay';
 
 import { SettingsModal } from './components/SettingsModal';
+import { useLanguage } from './contexts/LanguageContext';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
 
 const App: React.FC = () => {
+  const { t, language } = useLanguage();
   const [imageState, setImageState] = useState<ImageState>({
     original: null,
     edited: null,
@@ -67,24 +70,35 @@ const App: React.FC = () => {
     setIsProcessing(true);
 
     try {
-      const { chat, imagePart } = startLocationSession(base64, settings.apiKey, settings.model);
+      const { chat, imagePart } = startLocationSession(base64, settings.apiKey, settings.model, language);
       chatRef.current = chat;
 
       // 发送初始图片分析请求
-      const result = await sendCalibrationMessage(chat, [imagePart, { text: "请开始分析，提供精准校准逻辑并列出 30 个候选地点。" }]);
+      // 创建分析请求
+      // 使用英文提示词以获得更好效果，但要求模型用对应语言回答
+      //const langPrompt = settings.language === 'en' ? 'English' : 'Chinese'; // Basic mapping, but t() handles prompt text
+      // Better: pass the instruction instructions via specific method or just standard prompt
+
+      // Map language code to human-readable name for the prompt text
+      const langName = language === 'en' ? 'English' :
+        (language === 'ko' ? 'Korean' :
+          (language === 'ja' ? 'Japanese' :
+            (language === 'zh-TW' ? 'Traditional Chinese' : 'Simplified Chinese')));
+
+      const result = await sendCalibrationMessage(chat, [imagePart, { text: t('initial_prompt', { lang: langName }) }]);
 
       setImageState(prev => ({
         ...prev,
         analysis: result,
         chatHistory: [{
           role: 'model',
-          content: '分析已完成。我已为您列出 30 个初始候选地点。您可以提供更多细节（如：“附近有座红顶房子”或“路牌是某种语言”）来进一步校准。',
+          content: t('initial_analysis_done'),
           result
         }]
       }));
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "初始化分析失败，可能是网络或 API 限制。");
+      setError(err.message || t('error_init'));
     } finally {
       setIsProcessing(false);
     }
@@ -113,12 +127,12 @@ const App: React.FC = () => {
         analysis: result,
         chatHistory: [...prev.chatHistory, {
           role: 'model',
-          content: result.explanation || `收到了，正在基于“${userText}”情报重塑坐标系统...`,
+          content: result.explanation || t('model_thinking', { text: userText }),
           result
         }]
       }));
     } catch (err: any) {
-      setError("校准由于数据量过大或网络波动失败，请重试。");
+      setError(t('error_calibration'));
     } finally {
       setIsProcessing(false);
     }
@@ -143,8 +157,8 @@ const App: React.FC = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-black tracking-tight text-white leading-none">GEOVISION <span className="text-indigo-400">ULTRA</span></h1>
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">30-Points Quantum Calibration</p>
+              <h1 className="text-xl font-black tracking-tight text-white leading-none">{t('app_title')}</h1>
+              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">{t('subtitle')}</p>
             </div>
           </div>
 
@@ -181,6 +195,9 @@ const App: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </button>
+            <div className="ml-2 pl-2 border-l border-white/10">
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>
       </header>
@@ -191,11 +208,10 @@ const App: React.FC = () => {
             <div className="text-center mb-16 relative">
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 bg-indigo-500/20 blur-[100px] rounded-full"></div>
               <h2 className="text-6xl font-black text-white mb-8 leading-[1.1] tracking-tighter">
-                一张图，<br /><span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">三十个可能的真相。</span>
+                {t('hero_title_1')}<br /><span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">{t('hero_title_2')}</span>
               </h2>
               <p className="text-slate-400 text-xl leading-relaxed font-light">
-                上传任意地理照片，系统即刻生成 30 个阶梯式候选地址。<br />
-                通过交互对话，我们为您抽丝剥茧，锁定唯一真实。
+                {t('hero_desc')}
               </p>
             </div>
             <div className="vibrant-black-card p-2 rounded-[2.5rem]">
@@ -212,14 +228,14 @@ const App: React.FC = () => {
                   <img src={imageState.original} alt="Target" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                     <button onClick={reset} className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-4 py-2 rounded-xl backdrop-blur-xl border border-white/20 transition-all active:scale-95">
-                      更换照片
+                      {t('change_photo')}
                     </button>
                   </div>
                   {isProcessing && (
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
                       <div className="flex flex-col items-center">
                         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div>
-                        <span className="text-xs text-indigo-400 mt-4 font-black tracking-widest animate-pulse">解析中...</span>
+                        <span className="text-xs text-indigo-400 mt-4 font-black tracking-widest animate-pulse">{t('analyzing')}</span>
                       </div>
                     </div>
                   )}
@@ -229,7 +245,7 @@ const App: React.FC = () => {
                   <div className="h-[350px] overflow-y-auto mb-6 space-y-5 px-3 custom-scrollbar">
                     {imageState.chatHistory.length === 0 && !isProcessing && (
                       <div className="h-full flex items-center justify-center text-slate-600 text-sm italic">
-                        等待初步分析结果...
+                        {t('waiting_analysis')}
                       </div>
                     )}
                     {imageState.chatHistory.map((msg, i) => (
@@ -249,7 +265,7 @@ const App: React.FC = () => {
                     <input
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
-                      placeholder="提供更多环境线索（如植物、天气、周围文字）..."
+                      placeholder={t('input_placeholder')}
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-6 pr-14 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-slate-600"
                       disabled={isProcessing}
                     />
@@ -288,7 +304,7 @@ const App: React.FC = () => {
                     <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
                     <div className="absolute inset-0 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div>
                   </div>
-                  <p className="text-slate-500 text-sm mt-8 font-medium tracking-widest uppercase">深度算力接入中</p>
+                  <p className="text-slate-500 text-sm mt-8 font-medium tracking-widest uppercase">{t('deep_compute')}</p>
                 </div>
               )}
             </div>
