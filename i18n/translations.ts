@@ -42,7 +42,7 @@ const baseTranslations = {
 
 export const translations: Record<Language, Record<string, string>> = {
     'zh-CN': {
-        app_title: '看图寻地',
+        app_title: '看图寻地 Geo-Finder-AI',
         subtitle: '30点量子校准',
         identify_btn: '识别与校准',
         settings_tooltip: 'API 密钥与设置',
@@ -72,7 +72,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: '前往获取'
     },
     'zh-TW': {
-        app_title: '看圖尋地',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30點量子校準',
         identify_btn: '識別與校準',
         settings_tooltip: 'API 金鑰與設定',
@@ -102,7 +102,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: '前往獲取'
     },
     'en': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-Points Quantum Calibration',
         identify_btn: 'Identify & Calibrate',
         settings_tooltip: 'API Key & Settings',
@@ -132,7 +132,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Get It'
     },
     'ko': {
-        app_title: '지오비전',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30포인트 양자 보정',
         identify_btn: '식별 및 보정',
         settings_tooltip: 'API 키 및 설정',
@@ -162,7 +162,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: '받으러 가기'
     },
     'ja': {
-        app_title: 'ジオビジョン',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30点量子キャリブレーション',
         identify_btn: '識別と修正',
         settings_tooltip: 'APIキーと設定',
@@ -192,7 +192,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: '取得する'
     },
     'hi': {
-        app_title: 'जियोविजन',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-बिंदु क्वांटम अंशांकन',
         identify_btn: 'पहचानें और सुधारें',
         settings_tooltip: 'API कुंजी और सेटिंग्स',
@@ -222,7 +222,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'इसे प्राप्त करें'
     },
     'es': {
-        app_title: 'GeoVisión',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'Calibración Cuántica de 30 Puntos',
         identify_btn: 'Identificar y Calibrar',
         settings_tooltip: 'Clave API y Configuración',
@@ -246,7 +246,7 @@ export const translations: Record<Language, Record<string, string>> = {
         expert_consensus: 'Consenso de Expertos'
     },
     'ar': {
-        app_title: 'جيوفيجن',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'المعايرة الكمومية ذات 30 نقطة',
         identify_btn: 'تحديد ومعايرة',
         settings_tooltip: 'مفتاح API والإعدادات',
@@ -276,7 +276,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'احصل عليه'
     },
     'fr': {
-        app_title: 'GéoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'Calibration Quantique à 30 Points',
         identify_btn: 'Identifier et Calibrer',
         settings_tooltip: 'Clé API et Paramètres',
@@ -306,7 +306,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Obtenir'
     },
     'bn': {
-        app_title: 'জিওভিশন',
+        app_title: 'Geo-Finder-AI',
         subtitle: '৩০-পয়েন্ট কোয়ান্টাম ক্যালিব্রেশন',
         identify_btn: 'শনাক্ত এবং ক্যালিব্রেট করুন',
         settings_tooltip: 'API কী এবং সেটিংস',
@@ -336,7 +336,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'এটি পান'
     },
     'pt': {
-        app_title: 'GeoVisão',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'Calibração Quântica de 30 Pontos',
         identify_btn: 'Identificar e Calibrar',
         settings_tooltip: 'Chave API e Configurações',
@@ -366,7 +366,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Obter'
     },
     'ru': {
-        app_title: 'ГеоВижн',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-точечная Квантовая Калибровка',
         identify_btn: 'Идентифицировать и Калибровать',
         settings_tooltip: 'API Ключ и Настройки',
@@ -396,7 +396,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Получить'
     },
     'id': {
-        app_title: 'GeoVisi',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'Kalibrasi Kuantum 30 Titik',
         identify_btn: 'Identifikasi & Kalibrasi',
         settings_tooltip: 'Kunci API & Pengaturan',
@@ -426,7 +426,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Dapatkan'
     },
     'ur': {
-        app_title: 'جیوویژن',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-پوائنٹ کوانٹم کیلیبریشن',
         identify_btn: 'شناخت اور انشانکن',
         settings_tooltip: 'API کلید اور ترتیبات',
@@ -456,7 +456,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'حاصل کریں'
     },
     'de': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-Punkte Quantenkalibrierung',
         identify_btn: 'Identifizieren & Kalibrieren',
         settings_tooltip: 'API-Schlüssel & Einstellungen',
@@ -486,7 +486,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Holen'
     },
     'pcm': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-Points Quantum Calibration', // Pidgin often uses English tech terms or simplified English
         identify_btn: 'Identify & Calibrate',
         settings_tooltip: 'API Key & Settings',
@@ -516,7 +516,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Get Am'
     },
     'arz': {
-        app_title: 'جيوفيجن',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'المعايرة الكمومية بـ 30 نقطة',
         identify_btn: 'تحديد ومعايرة',
         settings_tooltip: 'مفتاح API والإعدادات',
@@ -546,7 +546,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'هاته'
     },
     'mr': {
-        app_title: 'जिओव्हिजन',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-बिंदू क्वांटम कॅलिब्रेशन',
         identify_btn: 'ओळखा आणि कॅलिब्रेट करा',
         settings_tooltip: 'API की आणि सेटिंग्ज',
@@ -576,7 +576,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'ते मिळवा'
     },
     'vi': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'Hiệu chuẩn Lượng tử 30 Điểm',
         identify_btn: 'Nhận diện & Hiệu chuẩn',
         settings_tooltip: 'Khóa API & Cài đặt',
@@ -606,7 +606,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Nhận'
     },
     'te': {
-        app_title: 'జియోవిజన్',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-పాయింట్ల క్వాంటం కాలిబ్రేషన్',
         identify_btn: 'గుర్తించండి & కాలిబ్రేట్ చేయండి',
         settings_tooltip: 'API కీ & సెట్టింగ్‌లు',
@@ -636,7 +636,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'పొందండి'
     },
     'tr': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30 Noktalı Kuantum Kalibrasyonu',
         identify_btn: 'Tanımla ve Kalibre Et',
         settings_tooltip: 'API Anahtarı ve Ayarlar',
@@ -666,7 +666,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Al'
     },
     'pnb': {
-        app_title: 'جیوویژن',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-پوائنٹ کوانٹم کیلیبریشن', // Often shares script with Urdu
         identify_btn: 'پچھان کرو تے کیلیبریٹ کرو',
         settings_tooltip: 'API کنجی تے سیٹنگز',
@@ -696,7 +696,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'حاصل کرو'
     },
     'sw': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'Urekebishaji wa Kuantum wa Pointi 30',
         identify_btn: 'Tambua na Urekebishe',
         settings_tooltip: 'Ufunguo wa API na Mipangilio',
@@ -726,7 +726,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Pata'
     },
     'tl': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-Puntos Quantum Calibration',
         identify_btn: 'Kilalanin at I-calibrate',
         settings_tooltip: 'API Key at Mga Setting',
@@ -756,7 +756,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'Kunin Ito'
     },
     'ta': {
-        app_title: 'ஜியோவிஷன்',
+        app_title: 'Geo-Finder-AI',
         subtitle: '30-புள்ளி குவாண்டம் அளவீடு',
         identify_btn: 'கண்டறிந்து அளவீடு செய்',
         settings_tooltip: 'API திறவுகோல் & அமைப்புகள்',
@@ -786,7 +786,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'பெறுங்கள்'
     },
     'fa': {
-        app_title: 'ژئوویژن',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'کالیبراسیون کوانتومی ۳۰ نقطه‌ای',
         identify_btn: 'شناسایی و کالیبره کردن',
         settings_tooltip: 'کلید API و تنظیمات',
@@ -816,7 +816,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'دریافت'
     },
     'th': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'การสอบเทียบควอนตัม 30 จุด',
         identify_btn: 'ระบุและสอบเทียบ',
         settings_tooltip: 'คีย์ API และการตั้งค่า',
@@ -846,7 +846,7 @@ export const translations: Record<Language, Record<string, string>> = {
         go_get: 'รับเลย'
     },
     'jv': {
-        app_title: 'GeoVision',
+        app_title: 'Geo-Finder-AI',
         subtitle: 'Kalibrasi Kuantum 30 Titik',
         identify_btn: 'Ngenali & Kalibrasi',
         settings_tooltip: 'Kunci API & Setelan',
