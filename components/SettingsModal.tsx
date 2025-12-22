@@ -120,7 +120,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onSave, on
                                     onChange={(e) => setModel(e.target.value as GeminiModel)}
                                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
                                 >
-                                    <option value={GeminiModel.GEMINI_3_0_FLASH} className="bg-[#0a0a0f]">Gemini 3.0 Flash (推荐)</option>
+                                    <option value={GeminiModel.GEMINI_3_0_FLASH} className="bg-[#0a0a0f]">Gemini 3.0 Flash</option>
                                     <option value={GeminiModel.GEMINI_3_0_PRO} className="bg-[#0a0a0f]">Gemini 3.0 Pro</option>
                                     <option value={GeminiModel.GEMINI_2_0_FLASH_EXP} className="bg-[#0a0a0f]">Gemini 2.0 Flash Exp</option>
                                 </select>

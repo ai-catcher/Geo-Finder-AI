@@ -22,11 +22,12 @@ const App: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
+  const [pendingImage, setPendingImage] = useState<string | null>(null);
 
   // API Key & Model State
   const [settings, setSettings] = useState<AppSettings>({
     apiKey: '',
-    model: GeminiModel.GEMINI_3_0_FLASH
+    model: GeminiModel.GEMINI_3_0_PRO
   });
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
@@ -40,7 +41,7 @@ const App: React.FC = () => {
 
     setSettings({
       apiKey: storedApiKey || '',
-      model: storedModel || GeminiModel.GEMINI_3_0_FLASH
+      model: storedModel || GeminiModel.GEMINI_3_0_PRO
     });
   }, []);
 
@@ -61,6 +62,7 @@ const App: React.FC = () => {
   // Handle initial image selection and analysis
   const handleImageSelect = useCallback(async (base64: string) => {
     if (!settings.apiKey) {
+      setPendingImage(base64);
       setShowSettingsModal(true);
       return;
     }
@@ -109,6 +111,14 @@ const App: React.FC = () => {
       setIsProcessing(false);
     }
   }, [settings]);
+
+  // Automatically trigger analysis if we have a pending image and now a valid API key
+  useEffect(() => {
+    if (settings.apiKey && pendingImage) {
+      handleImageSelect(pendingImage);
+      setPendingImage(null);
+    }
+  }, [settings.apiKey, pendingImage, handleImageSelect]);
 
   // Send a calibration message in the chat
   const handleSendMessage = async (e: React.FormEvent) => {
