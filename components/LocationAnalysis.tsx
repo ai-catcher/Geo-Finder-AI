@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { AnalysisResult } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -9,6 +9,7 @@ interface LocationAnalysisProps {
 
 export const LocationAnalysis: React.FC<LocationAnalysisProps> = ({ analysis }) => {
   const { t } = useLanguage();
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   return (
     <div className="space-y-8">
       {analysis.primaryLocation && (
@@ -37,20 +38,32 @@ export const LocationAnalysis: React.FC<LocationAnalysisProps> = ({ analysis }) 
         </div>
 
         <div className="grid grid-cols-1 gap-2.5 max-h-[450px] overflow-y-auto pr-3 custom-scrollbar">
-          {analysis.topGuesses.map((guess, index) => (
-            <div key={index} className="bg-white/5 border border-white/5 p-4 rounded-2xl flex items-center gap-4 hover:bg-white/[0.08] hover:border-white/10 transition-all duration-300 group cursor-default">
-              <div className="bg-slate-900 text-slate-500 w-7 h-7 rounded-xl flex items-center justify-center font-black text-[10px] flex-shrink-0 border border-white/5 group-hover:border-indigo-500/50 group-hover:text-indigo-400 transition-all">
-                {String(index + 1).padStart(2, '0')}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <h5 className="font-bold text-slate-200 text-sm truncate">{guess.name}</h5>
-                  <span className="text-[9px] font-black text-slate-600 bg-white/5 px-1.5 py-0.5 rounded uppercase">{Math.round(guess.confidence * 100)}%</span>
+          {analysis.topGuesses.map((guess, index) => {
+            const isExpanded = expandedIndex === index;
+            return (
+              <div
+                key={index}
+                className={`bg-white/5 border border-white/5 p-4 rounded-2xl flex items-start gap-4 hover:bg-white/[0.08] hover:border-white/10 transition-all duration-300 group cursor-pointer ${isExpanded ? 'bg-white/[0.08] border-white/10' : ''}`}
+                onClick={() => setExpandedIndex(isExpanded ? null : index)}
+              >
+                <div className="bg-slate-900 text-slate-500 w-7 h-7 mt-0.5 rounded-xl flex items-center justify-center font-black text-[10px] flex-shrink-0 border border-white/5 group-hover:border-indigo-500/50 group-hover:text-indigo-400 transition-all">
+                  {String(index + 1).padStart(2, '0')}
                 </div>
-                <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-light">{guess.description}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <h5 className={`font-bold text-slate-200 text-sm transition-all duration-300 ${isExpanded ? '' : 'truncate'}`}>{guess.name}</h5>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="text-[9px] font-black text-slate-600 bg-white/5 px-1.5 py-0.5 rounded uppercase">{Math.round(guess.confidence * 100)}%</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 text-slate-500 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-indigo-400' : 'group-hover:text-slate-300'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className={`text-[11px] text-slate-400 mt-1 font-light transition-all duration-300 ${isExpanded ? '' : 'line-clamp-1'}`}>{guess.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

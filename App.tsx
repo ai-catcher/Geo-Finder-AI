@@ -23,6 +23,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [pendingImage, setPendingImage] = useState<string | null>(null);
+  const [pendingChatImage, setPendingChatImage] = useState<string | null>(null);
 
   // API Key & Model State
   const [settings, setSettings] = useState<AppSettings>({
@@ -33,6 +34,7 @@ const App: React.FC = () => {
 
   const chatRef = useRef<Chat | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatFileInputRef = useRef<HTMLInputElement>(null);
 
   // Initialize Settings from localStorage
   useEffect(() => {
@@ -123,27 +125,48 @@ const App: React.FC = () => {
   // Send a calibration message in the chat
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim() || !chatRef.current || isProcessing) return;
+    if ((!inputValue.trim() && !pendingChatImage) || !chatRef.current || isProcessing) return;
 
     const userText = inputValue.trim();
     setInputValue('');
     setIsProcessing(true);
     setError(null);
 
+    const imageToSend = pendingChatImage;
+    setPendingChatImage(null);
+
+    const finalUserText = userText || t('analyze_new_image');
+
     // 立即显示用户消息
     setImageState(prev => ({
       ...prev,
-      chatHistory: [...prev.chatHistory, { role: 'user', content: userText }]
+      chatHistory: [...prev.chatHistory, {
+        role: 'user',
+        content: finalUserText,
+        image: imageToSend || undefined
+      }]
     }));
 
     try {
-      const result = await sendCalibrationMessage(chatRef.current, userText);
+      let messagePayload: any = finalUserText;
+
+      if (imageToSend) {
+        const imagePart = {
+          inlineData: {
+            mimeType: 'image/jpeg',
+            data: imageToSend.split(',')[1],
+          },
+        };
+        messagePayload = [imagePart, { text: messagePayload }];
+      }
+
+      const result = await sendCalibrationMessage(chatRef.current, messagePayload);
       setImageState(prev => ({
         ...prev,
         analysis: result,
         chatHistory: [...prev.chatHistory, {
           role: 'model',
-          content: result.explanation || t('model_thinking', { text: userText }),
+          content: result.explanation || t('model_thinking', { text: finalUserText }),
           result
         }]
       }));
@@ -266,34 +289,74 @@ const App: React.FC = () => {
                     )}
                     {imageState.chatHistory.map((msg, i) => (
                       <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}>
-                        <div className={`max-w-[90%] p-4 rounded-3xl text-sm leading-relaxed ${msg.role === 'user'
+                        <div className={`max-w-[90%] p-4 rounded-3xl text-sm leading-relaxed flex flex-col ${msg.role === 'user'
                           ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-none shadow-lg'
                           : 'bg-white/5 text-slate-300 border border-white/10 rounded-tl-none'
                           }`}>
-                          {msg.content}
+                          {msg.image && (
+                            <img src={msg.image} className="w-full max-w-[200px] h-auto object-cover rounded-xl mb-3 border border-white/10" alt="Attached" />
+                          )}
+                          <span>{msg.content}</span>
                         </div>
                       </div>
                     ))}
                     <div ref={chatEndRef} />
                   </div>
 
-                  <form onSubmit={handleSendMessage} className="relative group">
-                    <input
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      placeholder={t('input_placeholder')}
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-6 pr-14 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-slate-600"
-                      disabled={isProcessing}
-                    />
-                    <button
-                      type="submit"
-                      disabled={isProcessing || !inputValue.trim()}
-                      className="absolute right-3 top-2.5 p-2.5 text-indigo-400 hover:text-indigo-300 disabled:text-slate-700 transition-colors"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </button>
+                  <form onSubmit={handleSendMessage} className="relative group flex flex-col gap-2">
+                    {pendingChatImage && (
+                      <div className="relative inline-block w-20 h-20 mb-1 ml-2">
+                        <img src={pendingChatImage} className="w-full h-full object-cover rounded-xl border border-white/20" alt="Pending" />
+                        <button type="button" onClick={() => setPendingChatImage(null)} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-80 hover:opacity-100 transition-opacity">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                    <div className="relative">
+                      <input
+                        type="file"
+                        ref={chatFileInputRef}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          e.target.value = '';
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => setPendingChatImage(event.target?.result as string);
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => chatFileInputRef.current?.click()}
+                        title={t('attach_image')}
+                        className="absolute left-3 top-2.5 p-2.5 text-slate-400 hover:text-white transition-colors z-10"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                      <input
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder={t('input_placeholder')}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-14 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-slate-600"
+                        disabled={isProcessing}
+                      />
+                      <button
+                        type="submit"
+                        disabled={isProcessing || (!inputValue.trim() && !pendingChatImage)}
+                        className="absolute right-3 top-2.5 p-2.5 text-indigo-400 hover:text-indigo-300 disabled:text-slate-700 transition-colors"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </button>
+                    </div>
                   </form>
                 </div>
               </div>

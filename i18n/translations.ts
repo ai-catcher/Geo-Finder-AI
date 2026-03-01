@@ -69,7 +69,9 @@ export const translations: Record<Language, Record<string, string>> = {
         api_warning_msg: '请注意：Gemini API 需要绑定支付方式（信用卡）才能正常使用。',
         get_api_key_btn: '获取 Gemini API 密钥 (免费)',
         cancel: '取消',
-        go_get: '前往获取'
+        go_get: '前往获取',
+        attach_image: '附加图片',
+        analyze_new_image: '请结合新图片更新位置推断',
     },
     'zh-TW': {
         app_title: 'Geo-Finder-AI',
@@ -129,7 +131,9 @@ export const translations: Record<Language, Record<string, string>> = {
         api_warning_msg: 'Note: Gemini API requires a payment method (credit card) to function.',
         get_api_key_btn: 'Get Gemini API Key (Free)',
         cancel: 'Cancel',
-        go_get: 'Get It'
+        go_get: 'Get It',
+        attach_image: 'Attach Image',
+        analyze_new_image: 'Please update location inference based on the new image',
     },
     'ko': {
         app_title: 'Geo-Finder-AI',
