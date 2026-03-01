@@ -27,7 +27,7 @@ const App: React.FC = () => {
   // API Key & Model State
   const [settings, setSettings] = useState<AppSettings>({
     apiKey: '',
-    model: GeminiModel.GEMINI_3_0_PRO
+    model: GeminiModel.GEMINI_3_1_PRO
   });
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
@@ -41,7 +41,7 @@ const App: React.FC = () => {
 
     setSettings({
       apiKey: storedApiKey || '',
-      model: storedModel || GeminiModel.GEMINI_3_0_PRO
+      model: storedModel || GeminiModel.GEMINI_3_1_PRO
     });
   }, []);
 
